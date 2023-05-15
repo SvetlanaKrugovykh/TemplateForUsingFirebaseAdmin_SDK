@@ -1,0 +1,6 @@
+keys
+path
+node_modules
+env*
+.vscode
+.log
