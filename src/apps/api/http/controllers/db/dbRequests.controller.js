@@ -91,7 +91,7 @@ module.exports.createDocumentInCollection = async function (request, reply) {
 		const collectionRef = firestore.collection(collectionId);
 		const documentRef = collectionRef.doc();
 		const timestamp = Firebase.admin.firestore.FieldValue.serverTimestamp();
-		const updatedDocument = { ...document, createdAt: timestamp };
+		const updatedDocument = { ...document, createdAt: timestamp, documentId: documentRef.id };
 
 		const existingDocument = await documentRef.get();
 		if (existingDocument.exists) {
@@ -107,10 +107,30 @@ module.exports.createDocumentInCollection = async function (request, reply) {
 		throw HttpError.InternalServerError('Server error.');
 	}
 };
-
-
-
 //#endregion CreateDocumentInCollection
+
+//#region UpdateDocumentInCollection
+module.exports.updateDocumentInCollection = async function (request, reply) {
+	const collectionId = request.body.collectionId;
+	const documentId = request.body.documentId;
+	const firestore = Firebase.admin.firestore();
+	const document = request.body.document;
+
+	const timestamp = Firebase.admin.firestore.FieldValue.serverTimestamp();
+	const updatedDocument = { ...document, updatedAt: timestamp };
+	try {
+		const collectionRef = firestore.collection(collectionId)
+		await collectionRef.doc(documentId).update(updatedDocument)
+		return { documentId }
+	} catch (err) {
+		if (err.message === 'Response code 404 (Not Found)' || err.message === 'Not active') {
+			throw HttpError.NotFound('Not Found or Not active')
+		}
+		console.log(err)
+		throw HttpError.InternalServerError('Server error.')
+	}
+}
+//#endregion UpdateDocumentInCollection
 
 //#region GetDocumentbyId
 module.exports.getDocumentWithId = async function (request, reply) {
@@ -153,27 +173,6 @@ module.exports.getDocumentsWithFilter = async function (request, reply) {
 	}
 }
 //#endregion GetDocumentswthFilter
-
-
-//#region UpdateDocumentInCollection
-module.exports.updateDocumentInCollection = async function (request, reply) {
-	const { projectId, collectionName, documentId, document } = request.body
-	const firestore = Firebase.firestore({
-		projectId
-	})
-	try {
-		const collectionRef = firestore.collection(collectionName)
-		await collectionRef.doc(documentId).update(document)
-		return { documentId }
-	} catch (err) {
-		if (err.message === 'Response code 404 (Not Found)' || err.message === 'Not active') {
-			throw HttpError.NotFound('Not Found or Not active')
-		}
-		console.log(err)
-		throw HttpError.InternalServerError('Server error.')
-	}
-}
-//#endregion UpdateDocumentInCollection
 
 //#region DeleteDocumentInCollection
 module.exports.deleteDocumentInCollection = async function (request, reply) {

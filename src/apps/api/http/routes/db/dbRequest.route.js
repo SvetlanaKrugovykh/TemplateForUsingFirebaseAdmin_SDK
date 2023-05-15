@@ -48,6 +48,14 @@ module.exports = (fastify, _opts, done) => {
 		// ]
 	})
 
+	fastify.route({
+		method: 'POST',
+		url: '/db-requests/update-document-in-collection',
+		handler: dbRequestsController.updateDocumentInCollection,
+		// preHandler: [
+		// 	isAuthorizedGuard
+		// ]
+	})
 
 
 	fastify.route({
@@ -68,15 +76,6 @@ module.exports = (fastify, _opts, done) => {
 		// ]
 	})
 
-
-	fastify.route({
-		method: 'POST',
-		url: '/db-requests/update-document-in-collection',
-		handler: dbRequestsController.updateDocumentInCollection,
-		// preHandler: [
-		// 	isAuthorizedGuard
-		// ]
-	})
 
 	fastify.route({
 		method: 'POST',
