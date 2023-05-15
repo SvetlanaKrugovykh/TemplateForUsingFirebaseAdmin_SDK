@@ -95,27 +95,5 @@ module.exports = (fastify, _opts, done) => {
 		// ]
 	})
 
-	fastify.route({
-		method: 'POST',
-		url: '/db-requests/delete-database',
-		handler: dbRequestsController.deleteDatabase,
-		// preHandler: [
-		// 	isAuthorizedGuard
-		// ]
-	})
-
-	fastify.route({
-		method: 'POST',
-		url: '/db-requests/create-database',
-		handler: dbRequestsController.createDatabase,
-		// preHandler: [
-		// 	isAuthorizedGuard
-		// ]
-	})
-
-
-
-
-
 	done()
 }

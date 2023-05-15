@@ -216,30 +216,3 @@ module.exports.deleteCollection = async function (request, reply) {
 }
 //#endregion DeleteCollection
 
-//#region DeleteDatabase
-module.exports.deleteDatabase = async function (request, reply) {
-	const { projectId } = request.body
-	const firestore = Firebase.admin.firestore()
-	try {
-		await firestore.delete()
-		return { projectId }
-	} catch (err) {
-		console.log(err)
-		throw HttpError.InternalServerError('Server error.')
-	}
-}
-//#endregion DeleteDatabase
-
-//#region CreateDatabase
-module.exports.createDatabase = async function (request, reply) {
-	const { projectId } = request.body
-	const firestore = Firebase.admin.firestore()
-	try {
-		await firestore.createDatabase(projectId)
-		return { projectId }
-	} catch (err) {
-		console.log(err)
-		throw HttpError.InternalServerError('Server error.')
-	}
-}
-//#endregion CreateDatabase
