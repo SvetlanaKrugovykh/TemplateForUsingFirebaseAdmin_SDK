@@ -83,9 +83,8 @@ module.exports.listDocumentsInCollection = async function (request, reply) {
 
 //#region CreateDocumentInCollection
 module.exports.createDocumentInCollection = async function (request, reply) {
-	const collectionId = request.body.collectionId;
+	const { collectionId, document } = request.body
 	const firestore = Firebase.admin.firestore();
-	const document = request.body.document;
 
 	try {
 		const collectionRef = firestore.collection(collectionId);
@@ -111,10 +110,8 @@ module.exports.createDocumentInCollection = async function (request, reply) {
 
 //#region UpdateDocumentInCollection
 module.exports.updateDocumentInCollection = async function (request, reply) {
-	const collectionId = request.body.collectionId;
-	const documentId = request.body.documentId;
+	const { collectionId, documentId, document } = request.body
 	const firestore = Firebase.admin.firestore();
-	const document = request.body.document;
 
 	const timestamp = Firebase.admin.firestore.FieldValue.serverTimestamp();
 	const updatedDocument = { ...document, updatedAt: timestamp };
@@ -134,12 +131,10 @@ module.exports.updateDocumentInCollection = async function (request, reply) {
 
 //#region GetDocumentbyId
 module.exports.getDocumentWithId = async function (request, reply) {
-	const { projectId, collectionName, documentId } = request.body
-	const firestore = Firebase.firestore({
-		projectId
-	})
+	const { collectionId, documentId } = request.body
+	const firestore = Firebase.admin.firestore();
 	try {
-		const collectionRef = firestore.collection(collectionName)
+		const collectionRef = firestore.collection(collectionId)
 		const document = await collectionRef.doc(documentId).get()
 		return { document: document.data() }
 	} catch (err) {
@@ -154,12 +149,10 @@ module.exports.getDocumentWithId = async function (request, reply) {
 
 //#region GetDocumentswthFilter
 module.exports.getDocumentsWithFilter = async function (request, reply) {
-	const { projectId, collectionName, filter } = request.body
-	const firestore = Firebase.firestore({
-		projectId
-	})
+	const { collectionId, filter } = request.body
+	const firestore = Firebase.admin.firestore();
 	try {
-		const collectionRef = firestore.collection(collectionName)
+		const collectionRef = firestore.collection(collectionId)
 		const query = collectionRef.where(filter.field, filter.operator, filter.value)
 		const querySnapshot = await query.get()
 		const documents = querySnapshot.docs.map((doc) => doc.data())
@@ -176,12 +169,10 @@ module.exports.getDocumentsWithFilter = async function (request, reply) {
 
 //#region DeleteDocumentInCollection
 module.exports.deleteDocumentInCollection = async function (request, reply) {
-	const { projectId, collectionName, documentId } = request.body
-	const firestore = Firebase.firestore({
-		projectId
-	})
+	const { collectionId, documentId } = request.body
+	const firestore = Firebase.admin.firestore();
 	try {
-		const collectionRef = firestore.collection(collectionName)
+		const collectionRef = firestore.collection(collectionId)
 		await collectionRef.doc(documentId).delete()
 		return { documentId }
 	} catch (err) {
@@ -196,23 +187,23 @@ module.exports.deleteDocumentInCollection = async function (request, reply) {
 
 //#region DeleteCollection
 module.exports.deleteCollection = async function (request, reply) {
-	const { projectId, collectionName } = request.body
-	const firestore = Firebase.firestore({
-		projectId
-	})
+	const { collectionId } = request.body;
+	const firestore = Firebase.admin.firestore();
 	try {
-		const collectionRef = firestore.collection(collectionName)
-		const querySnapshot = await collectionRef.get()
-		const documents = querySnapshot.docs.map((doc) => doc.data())
-		const documentIds = querySnapshot.docs.map((doc) => doc.id)
-		for (let i = 0; i < documents.length; i++) {
-			await collectionRef.doc(documentIds[i]).delete()
-		}
-		return { collectionName }
+		const collectionRef = firestore.collection(collectionId);
+		const querySnapshot = await collectionRef.get();
+		const batch = firestore.batch();
+
+		querySnapshot.forEach((doc) => {
+			batch.delete(doc.ref);
+		});
+
+		await batch.commit();
+		return { collectionId };
 	} catch (err) {
-		console.log(err)
-		throw HttpError.InternalServerError('Server error.')
+		console.log(err);
+		throw HttpError.InternalServerError('Server error.');
 	}
-}
+};
 //#endregion DeleteCollection
 

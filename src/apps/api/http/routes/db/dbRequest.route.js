@@ -59,7 +59,7 @@ module.exports = (fastify, _opts, done) => {
 
 
 	fastify.route({
-		method: 'GET',
+		method: 'POST',
 		url: '/db-requests/get-document-with-id',
 		handler: dbRequestsController.getDocumentWithId,
 		// preHandler: [
@@ -68,7 +68,7 @@ module.exports = (fastify, _opts, done) => {
 	})
 
 	fastify.route({
-		method: 'GET',
+		method: 'POST',
 		url: '/db-requests/get-documents-with-filter',
 		handler: dbRequestsController.getDocumentsWithFilter,
 		// preHandler: [
