@@ -1,6 +1,9 @@
 npm install firebase-admin //Firebase Admin Node.js SDK
 
-methods
+using env.yaml (not env_variables.yaml temprorary)
+
+== Firebase DB access
+= methods
 	list-databases (*!DO NOT SUPPORT)
 	list-collections
 	create-collection {"collectionId": "xxx"} *with check if already exist
@@ -13,5 +16,7 @@ methods
 	get-documents-with-filter     *(filter.field, filter.operator, filter.value)
 	delete-document-in-collection
 	delete-collection             *delete documents in collection and then delete collection
+= graphQL 
 
-graphQL 
+
+== Firebase authentification

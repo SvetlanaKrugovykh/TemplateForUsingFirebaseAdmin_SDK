@@ -81,5 +81,6 @@ app.get('/', () => {
 })
 
 app.register(require('./http/routes/db/dbRequest.route'))
+app.register(require('./http/routes/auth/auth.route'))
 
 module.exports = app

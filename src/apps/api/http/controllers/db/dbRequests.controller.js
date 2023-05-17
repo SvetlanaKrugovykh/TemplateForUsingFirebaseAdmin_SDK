@@ -1,4 +1,4 @@
-const Firebase = require('../../../../../../libs/firebase')
+const Firebase = require('../../../../../libs/firebase')
 const HttpError = require('http-errors')
 
 //#region listCollections
