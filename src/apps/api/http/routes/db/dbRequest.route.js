@@ -95,5 +95,23 @@ module.exports = (fastify, _opts, done) => {
 		// ]
 	})
 
+	fastify.route({
+		method: 'POST',
+		url: '/db-requests/generate-random-data-into-db',
+		handler: dbRequestsController.generateRandomDataIntoDB,
+		// preHandler: [
+		// 	isAuthorizedGuard
+		// ]
+	})
+
+	fastify.route({
+		method: 'POST',
+		url: '/db-requests/get-random-data-from-db',
+		handler: dbRequestsController.getRandomDataFromDB,
+		// preHandler: [
+		// 	isAuthorizedGuard
+		// ]
+	})
+
 	done()
 }

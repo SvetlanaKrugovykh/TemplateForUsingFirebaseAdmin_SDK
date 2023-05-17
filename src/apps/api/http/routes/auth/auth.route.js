@@ -11,5 +11,14 @@ module.exports = (fastify, _opts, done) => {
 		// ]
 	})
 
+	fastify.route({
+		method: 'POST',
+		url: '/auth/login-user',
+		handler: authController.loginUser,
+		// preHandler: [
+		// 	isAuthorizedGuard
+		// ]
+	})
+
 	done()
 }

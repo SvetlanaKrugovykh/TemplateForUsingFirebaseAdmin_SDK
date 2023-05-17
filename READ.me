@@ -1,4 +1,4 @@
-npm install firebase-admin //Firebase Admin Node.js SDK
+npm install firebase-admin //Firebase Admin Node.js SDK (check on https://console.firebase.google.com/)
 
 using env.yaml (not env_variables.yaml temprorary)
 
@@ -16,7 +16,13 @@ using env.yaml (not env_variables.yaml temprorary)
 	get-documents-with-filter     *(filter.field, filter.operator, filter.value)
 	delete-document-in-collection
 	delete-collection             *delete documents in collection and then delete collection
+
+	generateRandomDataAndqExecQuery *creating a collection and some documents in { 
+  "data": {"collectionId": "","quantity": 2000, "document": { ... }}}
+
+	
 = graphQL 
 
 
-== Firebase authentification
+== Firebase authentification (doc/about/methods=https://firebase.google.com/docs/auth/admin/manage-users?hl=ru)
+
