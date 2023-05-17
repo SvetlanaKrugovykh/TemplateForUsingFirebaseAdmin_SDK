@@ -250,6 +250,7 @@ module.exports.generateRandomDataIntoDB = async function (request, reply) {
 }
 //#endregion
 
+//#region getRandomDataFromDB
 module.exports.getRandomDataFromDB = async function (request, _reply) {
 	const { collectionId } = request.body
 	const firestore = Firebase.admin.firestore()
@@ -266,3 +267,4 @@ module.exports.getRandomDataFromDB = async function (request, _reply) {
 		throw HttpError.InternalServerError('Server error.')
 	}
 }
+//#endregion
