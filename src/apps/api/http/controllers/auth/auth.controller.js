@@ -5,52 +5,86 @@ const HttpError = require('http-errors')
 module.exports.createUser = async function (request, reply) {
 	const { data } = request.body
 	if (!data || !data.email || !data.password) {
-		throw new Error('Invalid data');
+		throw new Error('Invalid data')
 	}
 	console.dir(Firebase.admin)
-	const firestoreAuth = Firebase.admin.auth();
+	const firebaseAuth = Firebase.admin.auth()
 	try {
-		const userCredential = await firestoreAuth.createUser({
+		const userCredential = await firebaseAuth.createUser({
 			email: data.email,
 			password: data.password
-		});
-		const user = userCredential.UserRecord;
-		console.dir(user)
-		const uid = 'f';
-
-		reply.send({ data: `User ${uid} created` });
+		})
+		const uid = userCredential.uid
+		reply.send({ data: `User ${uid} created` })
 	} catch (err) {
 		if (err.code === 'auth/email-already-exists') {
-			throw HttpError[409]('Email already exists');
+			throw HttpError[409]('Email already exists')
 		} else {
-			console.log(err);
+			console.log(err)
 			throw HttpError.InternalServerError('Server error.')
 		}
 	}
-};
+}
 //#endregion create user
 
-//#region login
-module.exports.loginUser = async function (request, reply) {
-	const { data } = request.body;
-	if (!data || !data.email || !data.password) {
-		throw new Error('Invalid data');
-	}
-	const firestoreAuth = Firebase.admin.auth();
+//#region list all users
+module.exports.listAllUsers = async function (request, reply) {
+	const firebaseAuth = Firebase.admin.auth()
 	try {
-		const userRecord = await firestoreAuth.getUserByEmail(data.email);
-		const verified = await verifyUserPassword(userRecord, data.password);
-		if (!verified) {
-			throw HttpError.Unauthorized('Invalid email or password');
-		}
-		const { uid, email } = userRecord;
-		reply.send({ data: { uid, email } });
+		const listUsersResult = await firebaseAuth.listUsers()
+		const users = listUsersResult.users.map((userRecord) => {
+			const { uid, email } = userRecord
+			return { uid, email }
+		})
+		reply.send({ data: users })
+	} catch (err) {
+		console.log(err)
+		throw HttpError.InternalServerError('Server error.')
+	}
+}
+//#endregion list all users
+
+//#region login-user
+module.exports.loginUser = async function (request, reply) {
+	const { data } = request.body
+	if (!data || !data.email || !data.password) {
+		throw new Error('Invalid data')
+	}
+	const firebaseAuth = Firebase.admin.auth()
+	try {
+		const user = await firebaseAuth.getUserByEmail(data.email)
+		const idToken = await firebaseAuth.createCustomToken(user.uid)
+		reply.send({ data: idToken })
 	} catch (err) {
 		if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
-			throw HttpError.Unauthorized('Invalid email or password');
+			throw HttpError.Unauthorized('Invalid email or password')
 		} else {
-			console.log(err);
-			throw HttpError.InternalServerError('Server error.');
+			console.log(err)
+			throw HttpError.InternalServerError('Server error.')
 		}
 	}
-};
+}
+//#endregion login-user
+
+
+//#region verify-token
+module.exports.verifyToken = async function (request, reply) {
+	const { data } = request.body
+	if (!data) {
+		throw new Error('Invalid data')
+	}
+	const firebaseAuth = Firebase.admin.auth()
+	try {
+		const token = await firebaseAuth.verifyIdToken(data)
+		console.log(token)
+		reply.send({ data: token.uid, message: `Token is valid for ${token.email}` })
+	} catch (err) {
+		if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+			throw HttpError.Unauthorized('Invalid email or password')
+		} else {
+			console.log(err)
+			throw HttpError.InternalServerError('Server error.')
+		}
+	}
+}
+//#endregion verify-token

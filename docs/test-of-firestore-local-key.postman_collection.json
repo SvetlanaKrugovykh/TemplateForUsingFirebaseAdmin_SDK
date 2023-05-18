@@ -1,0 +1,350 @@
+{
+	"info": {
+		"_postman_id": "7937ddc6-fb1c-4a72-97c4-699bea35ce25",
+		"name": "test-of-firestore-local-key",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8949745"
+	},
+	"item": [
+		{
+			"name": "Firebase Authentication",
+			"item": [
+				{
+					"name": "auth/create-user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"data\": {\r\n    \"email\": \"user@example.com\",\r\n    \"password\": \"password123\"\r\n  }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://[::1]:8181/auth/create-user",
+							"protocol": "http",
+							"host": [
+								"[::1]"
+							],
+							"port": "8181",
+							"path": [
+								"auth",
+								"create-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "auth/login-user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"data\": {\r\n    \"email\": \"user@example.com\",\r\n    \"password\": \"password123\"\r\n  }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://[::1]:8181/auth/create-user",
+							"protocol": "http",
+							"host": [
+								"[::1]"
+							],
+							"port": "8181",
+							"path": [
+								"auth",
+								"create-user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FireBase Storage DB access",
+			"item": [
+				{
+					"name": "db-requests/list-collections",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "db-requests/create-collection",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "db-requests/get-collection-with-name",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "db-requests/list-documents",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "db-requests/create-document-in-collection",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "db-requests/update-document-in-collection",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"collectionId\": \"ip_addresses\",\r\n    \"documentId\": \"5trp4EEANRJoPqRiIaoe\",\r\n    \"document\": {\r\n        \"ip_address\": \"192.168.1.7\",\r\n        \"description\": \"nothing 7\",\r\n        \"new_field\": \"nobody\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://[::1]:8181/db-requests/update-document-in-collection",
+							"protocol": "http",
+							"host": [
+								"[::1]"
+							],
+							"port": "8181",
+							"path": [
+								"db-requests",
+								"update-document-in-collection"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "db-requests/get-document-with-id",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"collectionId\": \"ip_addresses\",\r\n    \"documentId\": \"5trp4EEANRJoPqRiIaoe\",\r\n    \"document\": {\r\n        \"ip_address\": \"192.168.1.7\",\r\n        \"description\": \"nothing 7\",\r\n        \"new_field\": \"nobody\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://[::1]:8181/db-requests/update-document-in-collection",
+							"protocol": "http",
+							"host": [
+								"[::1]"
+							],
+							"port": "8181",
+							"path": [
+								"db-requests",
+								"update-document-in-collection"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "db-requests/get-documents-with-filter",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"collectionId\": \"ip_addresses\",\r\n    \"documentId\": \"5trp4EEANRJoPqRiIaoe\",\r\n    \"document\": {\r\n        \"ip_address\": \"192.168.1.7\",\r\n        \"description\": \"nothing 7\",\r\n        \"new_field\": \"nobody\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://[::1]:8181/db-requests/update-document-in-collection",
+							"protocol": "http",
+							"host": [
+								"[::1]"
+							],
+							"port": "8181",
+							"path": [
+								"db-requests",
+								"update-document-in-collection"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "db-requests/get-documents-with-filter Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"collectionId\": \"ip_addresses\",\r\n    \"documentId\": \"5trp4EEANRJoPqRiIaoe\",\r\n    \"document\": {\r\n        \"ip_address\": \"192.168.1.7\",\r\n        \"description\": \"nothing 7\",\r\n        \"new_field\": \"nobody\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://[::1]:8181/db-requests/update-document-in-collection",
+							"protocol": "http",
+							"host": [
+								"[::1]"
+							],
+							"port": "8181",
+							"path": [
+								"db-requests",
+								"update-document-in-collection"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "db-requests/delete-document-in-collection",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"collectionId\": \"ip_addresses\",\r\n    \"documentId\": \"5trp4EEANRJoPqRiIaoe\",\r\n    \"document\": {\r\n        \"ip_address\": \"192.168.1.7\",\r\n        \"description\": \"nothing 7\",\r\n        \"new_field\": \"nobody\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://[::1]:8181/db-requests/update-document-in-collection",
+							"protocol": "http",
+							"host": [
+								"[::1]"
+							],
+							"port": "8181",
+							"path": [
+								"db-requests",
+								"update-document-in-collection"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "db-requests/delete-collection",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"collectionId\": \"ip_addresses\",\r\n    \"documentId\": \"5trp4EEANRJoPqRiIaoe\",\r\n    \"document\": {\r\n        \"ip_address\": \"192.168.1.7\",\r\n        \"description\": \"nothing 7\",\r\n        \"new_field\": \"nobody\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://[::1]:8181/db-requests/update-document-in-collection",
+							"protocol": "http",
+							"host": [
+								"[::1]"
+							],
+							"port": "8181",
+							"path": [
+								"db-requests",
+								"update-document-in-collection"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "db-requests/generate-random-data-into-db",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"collectionId\": \"ip_addresses\",\r\n    \"documentId\": \"5trp4EEANRJoPqRiIaoe\",\r\n    \"document\": {\r\n        \"ip_address\": \"192.168.1.7\",\r\n        \"description\": \"nothing 7\",\r\n        \"new_field\": \"nobody\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://[::1]:8181/db-requests/update-document-in-collection",
+							"protocol": "http",
+							"host": [
+								"[::1]"
+							],
+							"port": "8181",
+							"path": [
+								"db-requests",
+								"update-document-in-collection"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "db-requests/get-random-data-from-db",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"collectionId\": \"ip_addresses\",\r\n    \"documentId\": \"5trp4EEANRJoPqRiIaoe\",\r\n    \"document\": {\r\n        \"ip_address\": \"192.168.1.7\",\r\n        \"description\": \"nothing 7\",\r\n        \"new_field\": \"nobody\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://[::1]:8181/db-requests/update-document-in-collection",
+							"protocol": "http",
+							"host": [
+								"[::1]"
+							],
+							"port": "8181",
+							"path": [
+								"db-requests",
+								"update-document-in-collection"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
