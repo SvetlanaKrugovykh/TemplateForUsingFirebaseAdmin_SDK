@@ -1,6 +1,11 @@
 const Firebase = require('../../../../../libs/firebase')
 const HttpError = require('http-errors')
+const fs = require('fs');
 
+const jwt = require('jsonwebtoken');
+const NodeRSA = require('node-rsa');
+
+const serviceAccount = JSON.parse(fs.readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS));
 //#region create user
 module.exports.createUser = async function (request, reply) {
 	const { data } = request.body
@@ -53,6 +58,7 @@ module.exports.loginUser = async function (request, reply) {
 	const firebaseAuth = Firebase.admin.auth()
 	try {
 		const user = await firebaseAuth.getUserByEmail(data.email)
+		console.log(user.uid)
 		const idToken = await firebaseAuth.createCustomToken(user.uid)
 		reply.send({ data: idToken })
 	} catch (err) {
@@ -69,15 +75,25 @@ module.exports.loginUser = async function (request, reply) {
 
 //#region verify-token
 module.exports.verifyToken = async function (request, reply) {
-	const { data } = request.body
-	if (!data) {
+
+	const { authorization } = request.headers
+	if (!authorization) {
 		throw new Error('Invalid data')
 	}
-	const firebaseAuth = Firebase.admin.auth()
 	try {
-		const token = await firebaseAuth.verifyIdToken(data)
-		console.log(token)
-		reply.send({ data: token.uid, message: `Token is valid for ${token.email}` })
+		const firebaseAuth = Firebase.admin.auth()
+		const publicKey = new NodeRSA().importKey(serviceAccount.private_key, 'pkcs8-private-pem').exportKey('pkcs8-public-pem')
+		const decodedToken = jwt.verify(authorization, publicKey)
+		console.log('decodedToken', decodedToken)
+		const user = await firebaseAuth.getUser(decodedToken.uid)
+		console.log('user', user)
+
+		// const user = await firebaseAuth.verifyIdToken(idToken)
+		// reply.send({ data: user.uid, message: `Token is valid for ${user.email}` })
+
+		reply.send({ data: decodedToken.uid, message: `Token is valid for ${decodedToken.uid}, ${user.email}` });
+
+
 	} catch (err) {
 		if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
 			throw HttpError.Unauthorized('Invalid email or password')
