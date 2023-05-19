@@ -1,11 +1,8 @@
 const Firebase = require('../../../../../libs/firebase')
 const HttpError = require('http-errors')
-const fs = require('fs');
+require('dotenv').config()
+const axios = require('axios')
 
-const jwt = require('jsonwebtoken');
-const NodeRSA = require('node-rsa');
-
-const serviceAccount = JSON.parse(fs.readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS));
 //#region create user
 module.exports.createUser = async function (request, reply) {
 	const { data } = request.body
@@ -55,12 +52,23 @@ module.exports.loginUser = async function (request, reply) {
 	if (!data || !data.email || !data.password) {
 		throw new Error('Invalid data')
 	}
+	const { FIREBASE_WEB_API_KEY } = process.env
 	const firebaseAuth = Firebase.admin.auth()
 	try {
 		const user = await firebaseAuth.getUserByEmail(data.email)
-		console.log(user.uid)
-		const idToken = await firebaseAuth.createCustomToken(user.uid)
-		reply.send({ data: idToken })
+		console.log('user.uid', user.uid)
+		const token = await firebaseAuth.createCustomToken(user.uid)
+		const res = await axios({
+			url: `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyCustomToken?key=${FIREBASE_WEB_API_KEY}`,
+			method: 'post',
+			data: {
+				token,
+				returnSecureToken: true
+			},
+			json: true
+		})
+		const idToken = res.data.idToken
+		reply.send({ jwttoken: idToken })
 	} catch (err) {
 		if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
 			throw HttpError.Unauthorized('Invalid email or password')
@@ -82,18 +90,8 @@ module.exports.verifyToken = async function (request, reply) {
 	}
 	try {
 		const firebaseAuth = Firebase.admin.auth()
-		const publicKey = new NodeRSA().importKey(serviceAccount.private_key, 'pkcs8-private-pem').exportKey('pkcs8-public-pem')
-		const decodedToken = jwt.verify(authorization, publicKey)
-		console.log('decodedToken', decodedToken)
-		const user = await firebaseAuth.getUser(decodedToken.uid)
-		console.log('user', user)
-
-		// const user = await firebaseAuth.verifyIdToken(idToken)
-		// reply.send({ data: user.uid, message: `Token is valid for ${user.email}` })
-
-		reply.send({ data: decodedToken.uid, message: `Token is valid for ${decodedToken.uid}, ${user.email}` });
-
-
+		const user = await firebaseAuth.verifyIdToken(authorization)
+		reply.send({ data: user.uid, message: `Token is valid for ${user.email}` })
 	} catch (err) {
 		if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
 			throw HttpError.Unauthorized('Invalid email or password')
