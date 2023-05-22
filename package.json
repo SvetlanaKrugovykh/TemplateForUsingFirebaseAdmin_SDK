@@ -15,6 +15,7 @@
 		"firebase": "^9.22.0",
 		"firebase-admin": "^11.8.0",
 		"http-errors": "^2.0.0",
+		"shopify-api-node": "^3.12.5",
 		"yamlenv": "^1.0.0"
 	}
 }

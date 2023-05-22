@@ -82,5 +82,6 @@ app.get('/', () => {
 
 app.register(require('./http/routes/db/dbRequest.route'))
 app.register(require('./http/routes/auth/auth.route'))
+app.register(require('./http/routes/shopify/shopify.route'))
 
 module.exports = app
